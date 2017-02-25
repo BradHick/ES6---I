@@ -20,7 +20,20 @@ class NegociacaoController {
 
     this._listaNegociacoes.adiciona(negociacao);
     console.log(this._listaNegociacoes.negociacoes);
+    this._limpaFormulario();
 
     //adicionar a negociação em uma lista
   }
+
+  _limpaFormulario(){
+  this._inputData.value = '';
+  this._inputValor.value = 0.0;
+  this._inputQuantidade.value = '';
+
+  this._inputQuantidade.focus();
+
+  }
+
+
+
 }

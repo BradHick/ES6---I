@@ -12,4 +12,6 @@ class ListaNegociacoes {
     return this._negociacoes;
   }
 
+  
+
 }
