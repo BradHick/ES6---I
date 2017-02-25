@@ -29,7 +29,7 @@ class NegociacaoController {
   _limpaFormulario(){
   this._inputData.value = '';
   this._inputValor.value = 0.0;
-  this._inputQuantidade.value = '';
+  this._inputQuantidade.value = 1;
 
   this._inputData.focus();
 

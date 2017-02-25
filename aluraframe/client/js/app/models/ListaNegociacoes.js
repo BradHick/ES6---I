@@ -9,9 +9,10 @@ class ListaNegociacoes {
   }
 
   get negociacoes(){
-    return this._negociacoes;
+    return [].concat(this._negociacoes); //forma de blindar a lista pra não poderem mecher sem ser pelo método
+    
   }
 
-  
+
 
 }
