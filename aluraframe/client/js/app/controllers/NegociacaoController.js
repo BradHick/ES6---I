@@ -5,36 +5,23 @@ class NegociacaoController {
     this._inputQuantidade = $('#quantidade');
     this._inputValor = $('#valor');
 
-    let self = this;
-    this._listaNegociacoes = new Proxy(new ListaNegociacoes(), {
-      get: function(target, prop, receiver) {
-
-        //nesse pronto, ele está intrceptando a função
-        //verificando se é uma function e se faz parte da lista a ser interceptada
-        if(['adiciona', 'esvazia'].includes(prop) && typeof(target[prop]) == typeof(Function)) {
-
-          //aqui ele entra e substitui a função interceptada por essa
-          //OBS: não pode ser uma Arrow function, pois a mesma tem o contexto léxico
-          return function(){ //substituindo no proxy....
-            console.log(`interceptando ${prop}`);
-            Reflect.apply(target[prop], target, arguments);
-            // nesse Reflect, ele pega a propriedade
-            self._negociacoesView._update(target);
-          }
-        }
-
-        return Reflect.get(target, prop, receiver);
-      }
-    });
-
-
+    this._listaNegociacoes = ProxyFactory.create(
+                            new ListaNegociacoes(),
+                            ['adiciona', 'esvazia'], (model) => {
+                              this._negociacoesView._update(model);
+                            });
 
 
     this._negociacoesView = new NegociacoesView($('#negociacoesView'));
     this._negociacoesView._update(this._listaNegociacoes);
 
 
-    this._mensagem = new Mensagem();
+    this._mensagem = ProxyFactory.create(
+                     new Mensagem(),
+                     ['texto'], (model) => {
+                       this._mensagemView._update(model);
+                     });
+
     this._mensagemView = new MensagemView($('#mensagemView'));
     this._mensagemView._update(this._mensagem);
   }
@@ -49,22 +36,18 @@ class NegociacaoController {
 
   apaga(){
     this._listaNegociacoes._esvazia();
-
     this._mensagem.texto = "Negociações excluidas com sucesso";
-    this._mensagemView._update(this._mensagem);
   }
 
   adiciona(event) {
     event.preventDefault();
 
     this._listaNegociacoes.adiciona(this._criaNegociacao());
+    //adicionar a negociação em uma lista
 
     this._mensagem.texto = "Negociação adicionada com sucesso!";
-    this._mensagemView._update(this._mensagem);
     console.log(this._listaNegociacoes.negociacoes);
     this._limpaFormulario();
-
-    //adicionar a negociação em uma lista
   }
 
   _limpaFormulario(){
