@@ -4,11 +4,36 @@ class NegociacaoController {
     this._inputData = $('#data');
     this._inputQuantidade = $('#quantidade');
     this._inputValor = $('#valor');
-    this._listaNegociacoes = new ListaNegociacoes(model =>
-      this._negociacoesView._update(model));
+
+    let self = this;
+    this._listaNegociacoes = new Proxy(new ListaNegociacoes(), {
+      get: function(target, prop, receiver) {
+
+        //nesse pronto, ele está intrceptando a função
+        //verificando se é uma function e se faz parte da lista a ser interceptada
+        if(['adiciona', 'esvazia'].includes(prop) && typeof(target[prop]) == typeof(Function)) {
+
+          //aqui ele entra e substitui a função interceptada por essa
+          //OBS: não pode ser uma Arrow function, pois a mesma tem o contexto léxico
+          return function(){ //substituindo no proxy....
+            console.log(`interceptando ${prop}`);
+            Reflect.apply(target[prop], target, arguments);
+            // nesse Reflect, ele pega a propriedade
+            self._negociacoesView._update(target);
+          }
+        }
+
+        return Reflect.get(target, prop, receiver);
+      }
+    });
+
+
+
 
     this._negociacoesView = new NegociacoesView($('#negociacoesView'));
     this._negociacoesView._update(this._listaNegociacoes);
+
+
     this._mensagem = new Mensagem();
     this._mensagemView = new MensagemView($('#mensagemView'));
     this._mensagemView._update(this._mensagem);
@@ -50,6 +75,8 @@ class NegociacaoController {
   this._inputData.focus();
 
   }
+
+
 
 
 
