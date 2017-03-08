@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Aprendendo IndexedDB</title>
+</head>
+<body>
+  <script src="js/app/models/Negociacao.js"></script>
+<script>
+
+  var connection;
+  var openRequest = window.indexedDB.open('aluraframe', 3);
+
+  openRequest.onupgradeneeded = e => {
+    console.log("Cria ou altera um banco já existente");
+    let minhaConnection = e.target.result; //usou-se o let pq está dentro de um bloco
+    if(minhaConnection.objectStoreNames.contains('negociacoes')){
+      minhaConnection.deleteObjectStore('negociacoes');
+    }
+    minhaConnection.createObjectStore('negociacoes',{autoIncrement: true});
+  }
+
+  openRequest.onsuccess = e => {
+    console.log("Conexão obtida com sucesso");
+    connection = e.target.result;
+  }
+
+  openRequest.onerror = e => {
+    console.log(e.target.error);
+  }
+
+
+  function adiciona() {
+    //sempre se deve pedir uma transação e e passar pra onde e de qual tipo nos parâmetro
+    let transaction = connection.transaction(['negociacoes'], 'readwrite');
+    //primeiro fiz uma transação pra depois poder ter a acesso a objectStore
+    let store = transaction.objectStore('negociacoes');
+
+    let negociacao = new Negociacao(new Date, 1, 200);
+    //a variável request guarda a requesição de adicionar a negociação no banco
+    let request = store.add(negociacao);
+
+    request.onsuccess = e => {
+      console.log('Negociação incluida com sucesso!');
+    }
+
+    request.onerror = e => {
+      console.log('Nçao foi possícel incluir a negociação');
+    }
+
+  }
+
+  function listaTodos() {
+    let transaction = connection.transaction(['negociacoes'], 'readwrite');
+    let store = transaction.objectStore('negociacoes');
+
+    let cursor = store.openCursor();
+
+    let negociacoes =[];
+
+    cursor.onsuccess = e => {
+      let atual = e.target.result;
+      //varrendo o banco e pegando os valores das negociações salvas
+      if(atual){
+        let dado = atual.value;
+        negociacoes.push(new Negociacao(dado._data, dado._quantidade, dado._valor));
+        atual.continue();
+      }else{
+        console.log(negociacoes);
+      }
+    }
+
+    cursor.onerror = e => {
+      console.log(e.target.error.name);
+    }
+
+  }
+
+  ConnectionFactory
+    .getConnection()
+    .then(connection => {
+      //usa a conexão
+    });
+
+  ConnectionFactory
+    .getConnection()
+    .then(connection => {
+      //a conexão tem que ser a mesma usada anteriormente
+    });
+
+</script>
+</body>
+</html>
