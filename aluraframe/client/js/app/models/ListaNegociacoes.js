@@ -1,22 +1,66 @@
-class ListaNegociacoes {
-  constructor() {
+"use strict";
 
-    this._negociacoes = [];
+System.register([], function (_export, _context) {
+  "use strict";
+
+  var _createClass, ListaNegociacoes;
+
+  function _classCallCheck(instance, Constructor) {
+    if (!(instance instanceof Constructor)) {
+      throw new TypeError("Cannot call a class as a function");
+    }
   }
 
-  adiciona(negociacao){
-    this._negociacoes.push(negociacao);
-  }
+  return {
+    setters: [],
+    execute: function () {
+      _createClass = function () {
+        function defineProperties(target, props) {
+          for (var i = 0; i < props.length; i++) {
+            var descriptor = props[i];
+            descriptor.enumerable = descriptor.enumerable || false;
+            descriptor.configurable = true;
+            if ("value" in descriptor) descriptor.writable = true;
+            Object.defineProperty(target, descriptor.key, descriptor);
+          }
+        }
 
-  get negociacoes(){
-    return [].concat(this._negociacoes); //forma de blindar a lista pra não poderem mecher sem ser pelo método
+        return function (Constructor, protoProps, staticProps) {
+          if (protoProps) defineProperties(Constructor.prototype, protoProps);
+          if (staticProps) defineProperties(Constructor, staticProps);
+          return Constructor;
+        };
+      }();
 
-  }
+      _export("ListaNegociacoes", ListaNegociacoes = function () {
+        function ListaNegociacoes() {
+          _classCallCheck(this, ListaNegociacoes);
 
-  _esvazia(){
-    this._negociacoes = [];
-  }
+          this._negociacoes = [];
+        }
 
+        _createClass(ListaNegociacoes, [{
+          key: "adiciona",
+          value: function adiciona(negociacao) {
+            this._negociacoes.push(negociacao);
+          }
+        }, {
+          key: "_esvazia",
+          value: function _esvazia() {
+            this._negociacoes = [];
+          }
+        }, {
+          key: "negociacoes",
+          get: function get() {
+            return [].concat(this._negociacoes); //forma de blindar a lista pra não poderem mecher sem ser pelo método
+          }
+        }]);
 
+        return ListaNegociacoes;
+      }());
 
-}
+      _export("ListaNegociacoes", ListaNegociacoes);
+    }
+  };
+});
+//# sourceMappingURL=ListaNegociacoes.js.map

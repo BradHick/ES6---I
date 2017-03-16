@@ -11,7 +11,7 @@
 
     <h1 class="text-center">Negociações</h1>
     <div id="mensagemView"></div>
-    <form class="form" onsubmit="negociacaoController.adiciona(event)">
+    <form class="form">
 
         <div class="form-group">
             <label for="data">Data</label>
@@ -33,7 +33,7 @@
 
     <div class="text-center">
 
-        <button onClick="negociacaoController.apaga()" class="btn btn-primary text-center" type="button">
+        <button class="btn btn-primary text-center" type="button">
             Apagar
         </button>
     </div>
@@ -42,7 +42,14 @@
 
     <div id="negociacoesView"></div>
 
-    <script src="js/app/polyfill/fetch.js"></script>
+    <script src="node_modules/systemjs/dist/system.js"></script>
+    <script>
+      System.defaultJSExtensions = true; //permite omitir a extensão .js dos arquivos
+      System.import('js/app/boot').catch(function(err) {
+        console.error(err);
+      });
+    </script>
+    <!-- <script src="js/app/polyfill/fetch.js"></script>
     <script src="js/app/models/Negociacao.js"></script>
     <script src="js/app/models/ListaNegociacoes.js"></script>
     <script src="js/app/models/Mensagem.js"></script>
@@ -57,9 +64,10 @@
     <script src="js/app/services/NegociacaoService.js"></script>
     <script src="js/app/services/HttpService.js"></script>
     <script src="js/app/dao/NegociacaoDao.js"></script>
-    <script type="text/javascript">
+    <script src="js/app/lib/datex.js"></script> -->
+    <!-- <script type="text/javascript">
       let negociacaoController = new NegociacaoController();
-    </script>
+    </script> -->
 
 
 </body>
